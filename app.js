@@ -4,10 +4,19 @@ const songsContainer = document.querySelector('#songs-container')
 const prevAndNextContainer = document.querySelector('#prev-and-next-container')
 const apiURL = `https://api.lyrics.ovh/`
 
+const insertSongsIntoPage = songsInfo => {
+    songsContainer.innerHTML = songsInfo.data.map(song => `
+    <li class="song">
+        <span class="song-artist"><strong>${song.artist.name}</strong> - ${song.title}</span>
+        <button class="btn" data-artist"${song.artist.name}" data-song-title="${song.title}">Ver letra</button>
+    </li>
+    `).join('')
+}
+
 const fetchsongsterm = async term => {
     const response = await fetch(`${apiURL}/suggest/${term}`)
     const data = await response.json()
-    console.log(data)
+    insertSongsIntoPage(data)
 }
 
 
