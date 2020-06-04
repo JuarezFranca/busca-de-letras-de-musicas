@@ -10,7 +10,6 @@ const getMoreSongs = async url => {
     const response = await fetch(`https://cors-anywhere.herokuapp.com/${url}`)
     const data = await response.json()
     insertSongsIntoPage(data)
-
 }
 
 // mostra na pagina o nome da musica e nome do artista linkando com o cod HTML
@@ -59,6 +58,15 @@ form.addEventListener('submit', event => { // executa uma ação quando o formul
 const fetchLyrics = async (artist, songTitle) => {
     const response = await fetch(`${apiURL}/v1/${artist}/${songTitle}`)
     const data = await response.json()  
+    const lyrics = data.lyrics.replace(/(\r\n|\r|\n)/g, '<br>') // quebra as linhas da letra da musica
+    
+
+    songsContainer.innerHTML = `
+    <li class="lyrics-container">
+        <h2><strong>${songTitle}</strong> - ${artist}</h2>
+        <p class="lyrics">${lyrics}</p>
+    </li>
+    `    
 }
 
 songsContainer.addEventListener('click', event => {
@@ -67,6 +75,8 @@ songsContainer.addEventListener('click', event => {
     if (clickedElement.tagname === 'BUTTON') {
         const artist = clickedElement.getAttribute('data-artist')
         const songTitle = clickedElement.getAttribute('data-song-title')
+
+        prevAndNextContainer.innerHTML = ''
         fetchLyrics(artist, songTitle)
     }
 })
